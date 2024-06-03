@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Л/Р №1 - Максим Демидов, K33422</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Максим Демидов, K33422</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Оглавление</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Л/Р №1</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#libmodelspy" class="nav-link">Модели (lib/models.py)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#endpointsteampy-userspy" class="nav-link">Эндпоинты (endpoints/team.py, users.py)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#dbpy-env" class="nav-link">Соединение с БД (db.py, .env)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#authpy" class="nav-link">Авторизация пользователей (auth.py)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Описание</h1>
+<p><strong>Задача</strong>: Реализация полноценного серверного приложения с помощью фреймворка FastAPI с применением дополнительных средств и библиотек.</p>
+<p><strong>Тема</strong>: Создание системы для проведения хакатонов.</p>
+<h1 id="libmodelspy">Модели (lib/models.py)</h1>
+<p>Реализованные модели.</p>
+<p><strong>Листинг кода</strong>:</p>
+<pre><code>from datetime import datetime
+from enum import Enum
+from typing import Optional, List
+
+from sqlmodel import SQLModel, Field, Relationship
+from sqlalchemy import JSON
+
+
+class SkillEnum(str, Enum):
+    frontend = &quot;Frontend&quot;
+    backend = &quot;Backend&quot;
+    fullstack = &quot;Fullstack&quot;
+    devops = &quot;DevOps&quot;
+    mobile = &quot;Mobile&quot;
+    data_science = &quot;Data Science&quot;
+
+
+class UserTeam(SQLModel, table=True):
+    team_id: Optional[int] = Field(
+        default=None, foreign_key=&quot;team.id&quot;, primary_key=True
+    )
+    user_id: Optional[int] = Field(
+        default=None, foreign_key=&quot;user.id&quot;, primary_key=True
+    )
+    position: str
+
+
+class UserProfile(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user: Optional[&quot;User&quot;] = Relationship(back_populates=&quot;profile&quot;)
+    avatar: Optional[str] = None
+    birth_date: Optional[str] = None
+    skills: List[SkillEnum] = Field(sa_type=JSON)
+
+
+class UserDefault(SQLModel):
+    username: str = Field(index=True)
+    password: str = Field(max_length=256, min_length=6)
+
+
+class User(UserDefault, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    teams: List[&quot;Team&quot;] = Relationship(back_populates=&quot;users&quot;, link_model=UserTeam)
+    profile_id: Optional[int] = Field(foreign_key=&quot;userprofile.id&quot;)
+    profile: UserProfile = Relationship(back_populates=&quot;user&quot;)
+
+
+class UserWithProfile(UserDefault):
+    profile: Optional[UserProfile] = None
+
+
+class TeamDefault(SQLModel):
+    name: str
+
+
+class Team(TeamDefault, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    users: List[User] = Relationship(back_populates=&quot;teams&quot;, link_model=UserTeam)
+    projects: List[&quot;Project&quot;] = Relationship(back_populates=&quot;team&quot;)
+
+
+class TeamWithUsers(TeamDefault):
+    users: List[UserWithProfile] = []
+
+
+class ProjectDefault(SQLModel):
+    name: str
+    description: Optional[str]
+    expected_result: Optional[str]
+
+
+class Project(ProjectDefault, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    team_id: int = Field(foreign_key=&quot;team.id&quot;)
+    team: Team = Relationship(back_populates=&quot;projects&quot;)
+    tasks: List[&quot;Task&quot;] = Relationship(back_populates=&quot;project&quot;)
+
+
+class ProjectWithTasksAndTeam(ProjectDefault):
+    tasks: List[&quot;Task&quot;] = []
+    team: Optional[Team] = None
+
+
+class TaskDefault(SQLModel):
+    name: str
+    description: Optional[str] = None
+    deadline: Optional[datetime] = None
+
+
+class Task(TaskDefault, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    project_id: int = Field(foreign_key=&quot;project.id&quot;)
+    project: Optional[Project] = Relationship(back_populates=&quot;tasks&quot;)
+</code></pre>
+<p>В данном случае, рассматриваем UserTeam как ассоциативную сущность - имеем два внешних ключа (team_id и user_id), которые связывают таблицы team и user.
+Устанавливается связь между таблицами User и Team. Эта связь указывает, что у каждого пользователя может быть несколько команд, и каждая команда может иметь несколько пользователей.</p>
+<p><strong>SQL-запрос на создание сущностей, описанных в models.py</strong>:</p>
+<pre><code>create table project
+(
+    id              serial
+        primary key,
+    name            varchar not null,
+    description     varchar,
+    expected_result varchar,
+    team_id         integer references team not null
+);
+create table task
+(
+    id          serial
+        primary key,
+    name        varchar not null,
+    description varchar,
+    deadline    timestamp,
+    project_id  integer references project not null
+);
+create table team
+(
+    id   serial
+        primary key,
+    name varchar not null
+);
+create table &quot;user&quot;
+(
+    id         serial
+        primary key,
+    username   varchar not null,
+    password   varchar not null,
+    profile_id integer references userprofile,
+);
+create table userprofile
+(
+    id         serial
+        primary key,
+    avatar     varchar,
+    birth_date varchar,
+    skills     json not null
+);
+create table userteam
+(
+    team_id  integer references team not null,
+    user_id  integer references user not null,
+    position varchar not null,
+    primary key (team_id, user_id)
+);
+</code></pre>
+<h1 id="endpointsteampy-userspy">Эндпоинты (endpoints/team.py, users.py)</h1>
+<p>Реализованные эндпоинты.</p>
+<p><strong>Листинг кода</strong>:</p>
+<pre><code>from datetime import datetime
+
+from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+
+from pydantic import BaseModel
+from sqlmodel import select
+
+from db import get_session
+from lib.models import (User, UserTeam, Team, Project, Task, TeamWithUsers,
+                        ProjectDefault, ProjectWithTasksAndTeam, TaskDefault)
+
+team_router = APIRouter()
+
+# ---- TEAMS ----
+
+# Create new team
+@team_router.post(&quot;/teams&quot;, response_model=Team)
+def create_team(team: Team, session=Depends(get_session)):
+    session.add(team)
+    session.commit()
+    session.refresh(team)
+    return team
+
+
+@team_router.get(&quot;/teams&quot;, response_model=List[Team])
+def get_all_teams(session=Depends(get_session)):
+    teams = session.query(Team).all()
+    return teams
+
+
+# Get team by id with information about all users
+@team_router.get(&quot;/teams/{team_id}&quot;, response_model=TeamWithUsers)
+def get_team_by_id(team_id: int, session=Depends(get_session)):
+    team = session.get(Team, team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail=&quot;Team not found&quot;)
+    return team
+
+
+class AddUserToTeamRequest(BaseModel):
+    position: str
+
+
+# Add user (by id) to team
+@team_router.post(&quot;/teams/{team_id}/users/{user_id}&quot;)
+def add_user_to_team(team_id: int, user_id: int, request_body: AddUserToTeamRequest, session=Depends(get_session)):
+    team = session.get(Team, team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail=&quot;Team not found&quot;)
+
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    try:
+
+        user_team = UserTeam(user_id=user.id, team_id=team.id, position=request_body.position)
+
+        session.add(user_team)
+        session.commit()
+    except Exception as e:
+        return {&quot;message&quot;: &quot;User already in team&quot;}
+    return {&quot;message&quot;: &quot;User added to team successfully&quot;}
+
+
+# Delete user from team
+@team_router.delete(&quot;/teams/{team_id}/users/{user_id}&quot;)
+def delete_user_from_team(team_id: int, user_id: int, session=Depends(get_session)):
+    team = session.get(Team, team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail=&quot;Team not found&quot;)
+
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    try:
+        team.users.remove(user)
+        session.commit()
+    except Exception as e:
+        return {&quot;message&quot;: &quot;User not in team&quot;}
+    return {&quot;message&quot;: &quot;User removed from team successfully&quot;}
+
+
+# Delete team
+@team_router.delete(&quot;/teams/{team_id}&quot;)
+def delete_team(team_id: int, session=Depends(get_session)):
+    team = session.get(Team, team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail=&quot;Team not found&quot;)
+
+    session.delete(team)
+    session.commit()
+    return {&quot;message&quot;: &quot;Team deleted successfully&quot;}
+
+
+# ---- PROJECTS ----
+# Create project
+
+@team_router.post(&quot;/projects/&quot;, response_model=Project)
+def create_project(project_data: ProjectDefault, team_id: int, session=Depends(get_session)):
+    team = session.get(Team, team_id)
+    if not team:
+        raise HTTPException(status_code=404, detail=&quot;Team not found&quot;)
+    project = Project(team_id=team_id, **project_data.dict())
+    session.add(project)
+    session.commit()
+    session.refresh(project)
+    return project
+
+
+# Get list of projects
+@team_router.get(&quot;/projects/&quot;, response_model=List[Project])
+def get_projects(session=Depends(get_session)):
+    return session.query(Project).all()
+
+
+# Get project with task list by id
+@team_router.get(&quot;/projects/{project_id}/&quot;, response_model=ProjectWithTasksAndTeam)
+def get_project_with_tasks(project_id: int, session=Depends(get_session)):
+    project = session.get(Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail=&quot;Project not found&quot;)
+    return project
+
+
+# Get list of projects of certain team by id
+@team_router.get(&quot;/teams/{team_id}/projects/&quot;, response_model=List[Project])
+def get_projects_by_team_id(team_id: int, session=Depends(get_session)):
+    return session.exec(select(Project).where(Project.team_id == team_id)).all()
+
+
+# Update project information
+@team_router.put(&quot;/projects/{project_id}/&quot;, response_model=Project)
+def update_project(project_id: int, project_data: ProjectDefault, session=Depends(get_session)):
+    project = session.get(Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail=&quot;Project not found&quot;)
+
+    for field, value in project_data.dict(exclude_unset=True).items():
+        setattr(project, field, value)
+
+    session.commit()
+    session.refresh(project)
+    return project
+
+
+# Delete project
+@team_router.delete(&quot;/projects/{project_id}/&quot;)
+def delete_project(project_id: int, session=Depends(get_session)):
+    project = session.query(Project).filter(Project.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail=&quot;Project not found&quot;)
+
+    session.delete(project)
+    session.commit()
+    return {&quot;message&quot;: &quot;Project deleted successfully&quot;}
+
+
+# ---- TASKS ----
+# Create task
+@team_router.post(&quot;/tasks/&quot;, response_model=Task)  # /tasks/?project_id=value
+def create_task(task_data: TaskDefault, project_id: int, session=Depends(get_session)):
+    project = session.get(Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail=&quot;Project not found&quot;)
+    task = Task(project_id=project_id, **task_data.dict())
+    session.add(task)
+    session.commit()
+    session.refresh(task)
+    return task
+
+
+# List all tasks
+@team_router.get(&quot;/tasks/&quot;, response_model=List[Task])
+def list_all_tasks(session=Depends(get_session)):
+    return session.query(Task).all()
+
+
+# List all tasks of certain project
+@team_router.get(&quot;/projects/{project_id}/tasks/&quot;, response_model=List[Task])
+def list_tasks_by_project(project_id: int, session=Depends(get_session)):
+    project = session.get(Project, project_id)
+    if not project:
+        raise HTTPException(status_code=404, detail=&quot;Project not found&quot;)
+    return session.exec(select(Task).where(Task.project_id == project_id)).all()
+
+
+# Get certain task by id
+@team_router.get(&quot;/tasks/{task_id}/&quot;, response_model=Task)
+def get_task_by_id(task_id: int, session=Depends(get_session)):
+    task = session.get(Task, task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail=&quot;Task not found&quot;)
+    return task
+
+
+# Update task by id
+@team_router.put(&quot;/tasks/{task_id}/&quot;, response_model=Task)
+def update_task(task_id: int, task_data: Task, session=Depends(get_session)):
+    task = session.get(Task, task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail=&quot;Task not found&quot;)
+
+    for field, value in task_data.dict(exclude_unset=True).items():
+        setattr(task, field, value)
+
+    session.commit()
+    session.refresh(task)
+    return task
+
+
+# List all tasks with missed deadlines
+@team_router.get(&quot;/tasks/urgent/&quot;, response_model=List[Task])
+def get_urgent_tasks(session=Depends(get_session)):
+    urgent_tasks = session.exec(select(Task).where(Task.deadline &lt; datetime.now())).all()
+    return urgent_tasks
+
+
+# Delete task by id
+@team_router.delete(&quot;/tasks/{task_id}/&quot;)
+def delete_task(task_id: int, session=Depends(get_session)):
+    task = session.get(Task, task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail=&quot;Task not found&quot;)
+
+    session.delete(task)
+    session.commit()
+    return {&quot;message&quot;: &quot;Task deleted successfully&quot;}
+</code></pre>
+<pre><code>from datetime import datetime
+
+from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+
+from sqlmodel import select
+from typing_extensions import TypedDict
+
+from auth import AuthHandler
+from db import get_session
+from lib.models import User, UserProfile, UserDefault, UserWithProfile
+from repos.users import find_user
+
+users_router = APIRouter()
+auth_handler = AuthHandler()
+
+@users_router.get(&quot;/users&quot;)
+def get_users(session=Depends(get_session)) -&gt; List[User]:
+    return session.exec(select(User)).all()
+
+
+@users_router.patch(&quot;/users/{user_id}&quot;, response_model=User)
+def update_user(user_id: int, profile_data: UserProfile, session=Depends(get_session)):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+
+    # Get the user's existing profile
+    profile = user.profile
+
+    # Update profile data
+    profile_data_dict = profile_data.dict(exclude_unset=True)
+    for key, value in profile_data_dict.items():
+        setattr(profile, key, value)
+
+    session.commit()
+    session.refresh(profile)
+    return profile
+
+
+@users_router.get('/users/me', response_model=UserWithProfile)
+def get_current_user(user: User = Depends(auth_handler.get_current_user), session=Depends(get_session)):
+    userWithProfile = session.get(User, user.id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    return userWithProfile
+
+
+# Get User by ID
+@users_router.get(&quot;/users/{user_id}&quot;, response_model=UserWithProfile)
+def get_user(user_id: int, session=Depends(get_session)) -&gt; User:
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+    return user
+
+
+# Delete User
+@users_router.delete(&quot;/users/{user_id}&quot;)
+def delete_user(user_id: int, session=Depends(get_session)) -&gt; TypedDict('Response', {&quot;message&quot;: str}):
+    user = session.get(User, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=&quot;User not found&quot;)
+
+    session.delete(user)
+    session.commit()
+    return {&quot;message&quot;: &quot;User deleted successfully&quot;}
+
+
+@users_router.post('/registration')
+def register(user_data: UserDefault, profile_data: UserProfile,
+             session=Depends(get_session)) -&gt; TypedDict('Response', {&quot;status&quot;: int, &quot;message&quot;: str}):
+    users = session.exec(select(User)).all()
+    if any(x.username == user_data.username for x in users):
+        raise HTTPException(status_code=400, detail='Username is taken')
+    hashed_pwd = auth_handler.get_password_hash(user_data.password)
+    profile = UserProfile(**profile_data.dict())
+
+    session.add(profile)
+    session.commit()
+    session.refresh(profile)
+
+    user = User(password=hashed_pwd, username=user_data.username)
+    user.profile = profile
+
+    session.add(user)
+    session.commit()
+    session.refresh(user)
+
+    return {&quot;status&quot;: 201, &quot;message&quot;: &quot;User created successfully&quot;}
+
+
+@users_router.post('/login')
+def login(user: UserDefault) -&gt; TypedDict('Response', {&quot;token&quot;: str}):
+    user_found = find_user(user.username)
+    if not user_found:
+        raise HTTPException(status_code=401, detail='Invalid username and/or password')
+    verified = auth_handler.verify_password(user.password, user_found.password)
+    if not verified:
+        raise HTTPException(status_code=401, detail='Invalid username and/or password')
+    token = auth_handler.encode_token(user_found.username)
+    return {'token': token}
+</code></pre>
+<h1 id="dbpy-env">Соединение с БД (db.py, .env)</h1>
+<p>Код соединения с БД.</p>
+<p><strong>Листинг кода</strong>:</p>
+<pre><code>from sqlmodel import SQLModel, Session, create_engine
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+db_url = os.getenv(&quot;DATABASE_URL&quot;)
+engine = create_engine(db_url, echo=True)
+
+
+def init_db():
+    SQLModel.metadata.create_all(engine)
+
+
+def get_session():
+    with Session(engine) as session:
+        yield session
+</code></pre>
+<pre><code>DATABASE_URL=postgresql://postgres:demid@localhost/warriors_db
+</code></pre>
+<h1 id="authpy">Авторизация пользователей (auth.py)</h1>
+<p>Аутентификация и авторизация пользователей.</p>
+<p><strong>Листинг кода</strong>:</p>
+<pre><code>import datetime
+
+from fastapi import Security, HTTPException
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from passlib.context import CryptContext
+import jwt
+from starlette import status
+
+from repos.users import find_user
+
+
+class AuthHandler:
+    security = HTTPBearer()
+    pwd_context = CryptContext(schemes=['bcrypt'])
+    secret = 'very-very-secret-key'
+
+    def get_password_hash(self, password):
+        return self.pwd_context.hash(password)
+
+    def verify_password(self, pwd, hashed_pwd):
+        return self.pwd_context.verify(pwd, hashed_pwd)
+
+    def encode_token(self, user_id):
+        payload = {
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=24),
+            'iat': datetime.datetime.utcnow(),
+            'sub': user_id
+        }
+        return jwt.encode(payload, self.secret, algorithm='HS256')
+
+    def decode_token(self, token):
+        try:
+            payload = jwt.decode(token, self.secret, algorithms=['HS256'])
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail='Expired signature')
+        except jwt.InvalidTokenError:
+            raise HTTPException(status_code=401, detail='Invalid token')
+
+    def auth_wrapper(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        return self.decode_token(auth.credentials)
+
+    def get_current_user(self, auth: HTTPAuthorizationCredentials = Security(security)):
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail='Could not validate credentials'
+        )
+        username = self.decode_token(auth.credentials)
+        if username is None:
+            raise credentials_exception
+        user = find_user(username)
+        if user is None:
+            raise credentials_exception
+        return user
+</code></pre>
+<p>Данный код содержит класс AuthHandler, который предоставляет функциональность для аутентификации и авторизации пользователей.</p>
+<p><strong>Шаги</strong>:</p>
+<ol>
+<li>
+<p>Импортируются необходимые модули и классы: datetime, HTTPBearer, HTTPAuthorizationCredentials, CryptContext и jwt. Они используются для обработки даты/времени, работы с токенами и хеширования паролей.</p>
+</li>
+<li>
+<p>Создается класс AuthHandler, который содержит различные методы для аутентификации и авторизации пользователей.</p>
+</li>
+<li>
+<p>В классе объявляются переменные и конфигурации:</p>
+<p>security - экземпляр HTTPBearer, используемый для обработки аутентификации с помощью токена.</p>
+<p>pwd_context - экземпляр CryptContext, используемый для хеширования паролей.</p>
+<p>secret - секретный ключ, используемый для создания и проверки токенов аутентификации.</p>
+</li>
+<li>
+<p>Метод get_password_hash принимает пароль в открытом виде и возвращает его хеш. Он использует pwd_context для хеширования пароля с помощью алгоритма bcrypt.</p>
+</li>
+<li>
+<p>Метод verify_password принимает пароль в открытом виде и хешированный пароль, и возвращает результат проверки соответствия паролей. Он использует pwd_context для сравнения паролей.</p>
+</li>
+<li>
+<p>Метод encode_token принимает идентификатор пользователя и создает JWT (JSON Web Token). В JWT включены следующие данные:</p>
+<p>'exp' (срок действия) - текущая дата и время плюс 24 часа.</p>
+<p>'iat' (время выдачи) - текущая дата и время.</p>
+<p>'sub' (подписчик) - идентификатор пользователя.</p>
+<p>Возвращает закодированный JWT с использованием секретного ключа.</p>
+</li>
+<li>
+<p>Метод decode_token принимает токен и раскодирует его, проверяя его целостность и срок действия. Если токен действителен, он возвращает идентификатор пользователя ('sub' из токена). Если токен недействителен, выбрасывается исключение HTTPException.</p>
+</li>
+<li>
+<p>Метод auth_wrapper используется в FastAPI как зависимость, чтобы проверить и декодировать токен аутентификации, предоставленный в заголовке запроса. Возвращает идентификатор пользователя.</p>
+</li>
+<li>
+<p>Метод get_current_user также используется в FastAPI как зависимость. Он проверяет и декодирует токен аутентификации, а затем использует идентификатор пользователя для получения соответствующего пользователя. Если токен недействителен или пользователя не существует, выбрасывается исключение HTTPException.</p>
+</li>
+</ol>
+<p>Хеширование пароля выполняется с использованием модуля passlib и его метода CryptContext. При вызове метода hash с переданным паролем, пароль хешируется с использованием выбранного алгоритма (в данном случае bcrypt). Хешированный пароль затем сохраняется в базе данных. При проверке пароля методом verify сравнивается хешированный пароль из базы данных с переданным паролем в открытом виде. Если пароли совпадают, метод verify возвращает True, в противном случае - False.</p>
+<p><strong>Ссылка на GitHub</strong>: <a href="https://github.com/m-demidoff/ITMO_ICT_WebDevelopment_tools_2023-2024/tree/lab1/students/k33422/Demidov_Maxim/lr1"><em>тык</em></a> </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
