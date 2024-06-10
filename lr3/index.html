@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Л/Р №3 - Максим Демидов, K33422</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Максим Демидов, K33422</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Оглавление</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lr1/" class="nav-link">Л/Р №1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lr2/" class="nav-link">Л/Р №2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Л/Р №3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../lr2/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">Стек</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#parserpy" class="nav-link">parser.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#workerpy" class="nav-link">worker.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#docker-composeyml" class="nav-link">docker-compose.yml</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">Запуск</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Описание</h1>
+<p><strong>Цель работы</strong>: научиться упаковывать FastAPI приложение в Docker, интегрировать парсер данных с базой данных и вызывать парсер через API и очередь.</p>
+<h2 id="_2">Стек</h2>
+<ul>
+<li><code>fastapi</code></li>
+<li><code>uvicorn</code></li>
+<li><code>alembic</code></li>
+<li><code>sqlmodel</code></li>
+<li><code>celery</code></li>
+<li><code>redis</code></li>
+</ul>
+<h2 id="parserpy"><strong>parser.py</strong></h2>
+<pre><code>from fastapi import APIRouter, HTTPException, BackgroundTasks
+import requests
+import asyncio
+from worker import celery_app
+
+parser_router = APIRouter()
+
+
+@parser_router.post(&quot;/parse/{category}&quot;)
+async def parse(category: str):
+    try:
+        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
+        return response.json()
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@parser_router.post(&quot;/celery-parse/{category}&quot;)
+async def parse(category: str, background_tasks: BackgroundTasks):
+    print(&quot;parsing&quot;)
+    try:
+        # Постановка задачи в очередь Celery
+
+        task = celery_app.send_task('parse_urls_task', args=[category])
+
+        # Добавление фоновой задачи для проверки статуса задачи
+        background_tasks.add_task(check_task_status, task.id)
+
+        return {&quot;task_id&quot;: task.id, &quot;status&quot;: &quot;Task has been started&quot;}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+async def check_task_status(task_id: str):
+    result = celery_app.AsyncResult(task_id)
+    while not result.ready():
+        await asyncio.sleep(1)
+    return result.result
+</code></pre>
+<h2 id="workerpy"><strong>worker.py</strong></h2>
+<pre><code>from celery import Celery
+from sqlmodel import Session, create_engine, text
+import os
+import requests
+from fastapi import HTTPException
+
+engine = create_engine(os.getenv(&quot;DATABASE_URL&quot;), echo=True)
+
+
+print(os.getenv(&quot;CELERY_BROKER_URL&quot;), os.getenv(&quot;CELERY_RESULT_BACKEND&quot;))
+celery_app = Celery('fast_api_lab', broker=os.getenv(&quot;CELERY_BROKER_URL&quot;, 'redis://localhost:6379/0'),
+                    backend=os.getenv(&quot;CELERY_RESULT_BACKEND&quot;, 'redis://localhost:6379/0'))
+
+celery_app.conf.update(
+    task_serializer='json',
+    result_serializer='json',
+    accept_content=['json'],
+    timezone='UTC',
+    enable_utc=True,
+    beat_schedule={
+        'count-records-every-hour': {
+            'task': 'count_records_task',
+            'schedule': 3.0,  # каждый час
+        },
+    },
+)
+
+
+@celery_app.task(name=&quot;parse_urls_task&quot;)
+def parse_urls_task(category: str):
+    try:
+        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
+        return response.json()
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@celery_app.task(name=&quot;count_records_task&quot;)
+def count_records_task():
+    table_names = [&quot;project&quot;, &quot;task&quot;, &quot;team&quot;, &quot;user&quot;, &quot;userprofile&quot;]
+    counts = {}
+
+    with Session(engine) as session:
+        for table_name in table_names:
+            statement = text(f&quot;SELECT COUNT(*) FROM {table_name}&quot;)
+            result = session.execute(statement).one()
+            counts[table_name] = result[0]
+
+    return counts
+</code></pre>
+<h2 id="docker-composeyml"><strong>docker-compose.yml</strong></h2>
+<pre><code>version: &quot;3.8&quot;
+services:
+  async_lab:
+    build: ./async_lab
+    ports:
+      - &quot;9090:8080&quot;
+    expose:
+      - &quot;9090&quot;
+    environment:
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_HOST: db
+    depends_on:
+      - db
+
+  fast_api_lab:
+    build: ./fast_api_lab
+    ports:
+      - &quot;8080:8080&quot;
+    expose:
+      - &quot;8080&quot;
+    command: uvicorn main:app --host 0.0.0.0 --port 8080
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/warriors_db
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+        - &quot;5432:5432&quot;
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: warriors_db
+
+  redis:
+    image: redis:latest
+    ports:
+      - &quot;6379:6379&quot;
+    volumes:
+      - redis_data:/data
+
+  celery_worker:
+    build: ./fast_api_lab
+    depends_on:
+      - redis
+      - fast_api_lab
+      - db
+    command: celery -A worker:celery_app worker --loglevel=info --pool=solo
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/warriors_db
+
+  celery_beat:
+    build: ./fast_api_lab
+    depends_on:
+      - redis
+      - fast_api_lab
+      - db
+    command: celery -A worker:celery_app beat --loglevel=info
+    environment:
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/warriors_db
+
+
+  celery_dashboard:
+    build: ./fast_api_lab
+    command: celery --broker=redis://redis:6379/0 flower --port=5555
+    ports:
+      - 5556:5555
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - fast_api_lab
+      - redis
+      - celery_worker
+
+volumes:
+    postgres_data:
+    redis_data:
+</code></pre>
+<h2 id="_3">Запуск</h2>
+<p>Запуск проекта осуществляется командой <code>docker-compose up -d --build</code>, через docker desktop -  запущенные контейнеры.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

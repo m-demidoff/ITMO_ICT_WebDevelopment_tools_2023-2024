@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Л/Р №2 - Максим Демидов, K33422</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Максим Демидов, K33422</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Оглавление</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lr1/" class="nav-link">Л/Р №1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Л/Р №2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../lr3/" class="nav-link">Л/Р №3</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../lr1/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../lr3/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#_1" class="nav-link">Описание</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#1" class="nav-link">Задание 1:</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#task1_threadingpy" class="nav-link">task1_threading.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task1_multiprocessingpy" class="nav-link">task1_multiprocessing.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task1_asynciopy" class="nav-link">task1_asyncio.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-bs-level="1"><a href="#2" class="nav-link">Задание 2:</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#task2_threadingpy" class="nav-link">task2_threading.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task2_multiprocessingpy" class="nav-link">task2_multiprocessing.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#html" class="nav-link">Функции для парсинга html и сохранения данных в базу данных</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#task2_asynciopy" class="nav-link">task2_asyncio.py</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#html_1" class="nav-link">Асинхронные функции для парсинга html и сохранения данных в базу данных</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_2" class="nav-link">Сравнение времени выполнения программ</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Описание</h1>
+<p><strong>Цель работы</strong>: понять отличия потоками и процессами и понять, что такое асинхронность в Python.</p>
+<h1 id="1"><strong>Задание 1:</strong></h1>
+<p><strong>Задача:</strong> Напишите три различных программы на Python, использующие каждый из подходов: threading, multiprocessing и
+async. Каждая
+программа должна решать считать сумму всех чисел от 1 до 1000000. Разделите вычисления на несколько параллельных задач
+для ускорения выполнения.</p>
+<h2 id="task1_threadingpy"><strong>task1_threading.py</strong></h2>
+<pre><code class="language-python">import threading
+
+
+def calculate_sum(start, end, result):
+    partial_sum = sum(range(start, end))
+    result.append(partial_sum)
+
+
+def main():
+    num_threads = 4
+    chunk_size = 1000000 // num_threads
+    threads = []
+    result = []
+
+    for i in range(num_threads):
+        start = i * chunk_size + 1
+        end = (i + 1) * chunk_size + 1
+        thread = threading.Thread(target=calculate_sum, args=(start, end, result))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+    total_sum = sum(result)
+    print(&quot;Total sum:&quot;, total_sum)
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    main()
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h2 id="task1_multiprocessingpy"><strong>task1_multiprocessing.py</strong></h2>
+<pre><code class="language-python">from multiprocessing import Process, Queue
+
+
+def calculate_sum(start, end, result_queue):
+    partial_sum = sum(range(start, end))
+    result_queue.put(partial_sum)
+
+
+def main():
+    num_processes = 4
+    chunk_size = 1000000 // num_processes
+    processes = []
+    result_queue = Queue()
+
+    for i in range(num_processes):
+        start = i * chunk_size + 1
+        end = (i + 1) * chunk_size + 1
+        process = Process(target=calculate_sum, args=(start, end, result_queue))
+        processes.append(process)
+        process.start()
+
+    for process in processes:
+        process.join()
+
+    total_sum = 0
+    while not result_queue.empty():
+        total_sum += result_queue.get()
+
+    print(&quot;Total sum:&quot;, total_sum)
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    main()
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h2 id="task1_asynciopy"><strong>task1_asyncio.py</strong></h2>
+<pre><code class="language-python">import asyncio
+
+
+async def calculate_sum(start, end):
+    return sum(range(start, end))
+
+
+async def main():
+    num_tasks = 4
+    chunk_size = 1000000 // num_tasks
+    tasks = []
+
+    for i in range(num_tasks):
+        start = i * chunk_size + 1
+        end = (i + 1) * chunk_size + 1
+        task = asyncio.create_task(calculate_sum(start, end))
+        tasks.append(task)
+
+    partial_sums = await asyncio.gather(*tasks)
+    total_sum = sum(partial_sums)
+    print(&quot;Total sum:&quot;, total_sum)
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    asyncio.run(main())
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h1 id="2"><strong>Задание 2:</strong></h1>
+<p><strong>Задача:</strong> Напишите программу на Python для параллельного парсинга нескольких веб-страниц с сохранением данных в базу
+данных с использованием подходов threading, multiprocessing и async. Каждая программа должна парсить информацию с
+нескольких веб-сайтов, сохранять их в базу данных.</p>
+<h2 id="task2_threadingpy"><strong>task2_threading.py</strong></h2>
+<pre><code class="language-python">import threading
+
+from task2.handlers import (
+    parse_all_urls,
+    data_handlers
+)
+
+
+def parse_and_save():
+    # Создаем потоки для обработки каждого URL
+    threads = []
+    for category, handler_func in data_handlers.items():
+        url = f&quot;https://async-lab.tiiny.site/{category}&quot;
+        print(url)
+        thread = threading.Thread(target=parse_all_urls, args=(handler_func, url, 5))
+        threads.append(thread)
+        thread.start()
+
+    # Ждем завершения всех потоков
+    for thread in threads:
+        thread.join()
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    parse_and_save()
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h2 id="task2_multiprocessingpy"><strong>task2_multiprocessing.py</strong></h2>
+<pre><code class="language-python">import multiprocessing
+from task2.handlers import parse_all_urls, data_handlers
+
+
+def parse_and_save():
+    # Создаем процессы для обработки каждого URL
+    processes = []
+    for category, handler_func in data_handlers.items():
+        url = f&quot;https://async-lab.tiiny.site/{category}&quot;
+        print(url)
+        process = multiprocessing.Process(target=parse_all_urls, args=(handler_func, url, 5))
+        processes.append(process)
+        process.start()
+
+    # Ждем завершения всех процессов
+    for process in processes:
+        process.join()
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    parse_and_save()
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h2 id="html">Функции для парсинга html и сохранения данных в базу данных</h2>
+<p>Общие для threading и multiprocessing</p>
+<pre><code class="language-python">import json
+
+import psycopg2
+import requests
+from bs4 import BeautifulSoup
+
+
+def get_connection():
+    return psycopg2.connect(
+        dbname=&quot;warriors_db&quot;,
+        user=&quot;postgres&quot;,
+        password=&quot;TecHeres3141&quot;,
+        host=&quot;localhost&quot;,
+        port=&quot;5432&quot;
+    )
+
+
+def parse_and_save_users(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    users = []
+
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        for li in soup.select('ul &gt; li'):
+            user = {}
+            username = li.select_one('.username').text
+            password = li.select_one('.password').text
+            profile_id = int(li.select_one('.profile-id').text)
+            users.append(user)
+
+            cursor.execute(
+                &quot;INSERT INTO \&quot;user\&quot; (username, password, profile_id) VALUES (%s, %s, %s)&quot;,
+                (username, password, profile_id)
+            )
+
+    conn.commit()
+    conn.close()
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+def parse_and_save_projects(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    projects = []
+
+    conn = get_connection()
+
+    cursor = conn.cursor()
+
+    for li in soup.select('ul &gt; li'):
+        project = {}
+        project_name = li.select_one('.name').text
+        project_description = li.select_one('.description').text
+        project_expected_result = li.select_one('.expected-result').text
+        project_team_id = int(li.select_one('.team-id').text)
+        projects.append(project)
+
+        cursor.execute(&quot;INSERT INTO project (name, description, expected_result, team_id) VALUES (%s, %s, %s, %s)&quot;,
+                       (project_name, project_description, project_expected_result, project_team_id))
+
+    conn.commit()
+    conn.close()
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+def parse_and_save_tasks(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    conn = get_connection()
+
+    with conn.cursor() as cursor:
+        for li in soup.select('ul &gt; li'):
+            task_name = li.select_one('.name').text
+            task_description = li.select_one('.description').text
+            task_deadline = li.select_one('.deadline').text
+            project_id = int(li.select_one('.project-id').text)
+
+            cursor.execute(
+                &quot;INSERT INTO task (name, description, deadline, project_id) VALUES (%s, %s, %s, %s)&quot;,
+                (task_name, task_description, task_deadline, project_id)
+            )
+
+    conn.commit()
+    conn.close()
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+def parse_and_save_userprofiles(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    conn = get_connection()
+
+    with conn.cursor() as cursor:
+        for li in soup.select('ul &gt; li'):
+            avatar = li.select_one('.avatar').text
+            birth_date = li.select_one('.birth_date').text
+            skills = [skill_li.text for skill_li in li.select('ol.skills &gt; li')]
+
+            cursor.execute(
+                &quot;INSERT INTO userprofile (avatar, birth_date, skills) VALUES (%s, %s, %s)&quot;,
+                (avatar, birth_date, json.dumps(skills))
+            )
+
+    conn.commit()
+    conn.close()
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+def parse_and_save_teams(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    for li in soup.select('ul &gt; li'):
+        team_name = li.select_one('.name').text
+
+        cursor.execute(
+            &quot;INSERT INTO team (name) VALUES (%s)&quot;,
+            (team_name,)
+        )
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+def parse_all_urls(handle_func, base, count):
+    for i in range(1, count + 1):
+        url = f&quot;{base}{i}.html&quot;
+        handle_func(url)
+
+
+data_handlers = {
+    &quot;tasks&quot;: parse_and_save_tasks,
+    &quot;projects&quot;: parse_and_save_projects,
+    &quot;users&quot;: parse_and_save_users,
+    &quot;teams&quot;: parse_and_save_teams,
+    &quot;userprofiles&quot;: parse_and_save_userprofiles,
+}
+</code></pre>
+<h2 id="task2_asynciopy"><strong>task2_asyncio.py</strong></h2>
+<pre><code class="language-python">import asyncio
+from task2.async_handlers import (
+    parse_all_urls,
+    data_handlers
+)
+
+
+async def parse_and_save():
+    tasks = []
+    for category, handler_func in data_handlers.items():
+        url = f&quot;https://async-lab.tiiny.site/{category}&quot;
+        print(url)
+        tasks.append(parse_all_urls(handler_func, url, 5))
+
+    # Запуск всех задач асинхронно
+    await asyncio.gather(*tasks)
+
+
+if __name__ == &quot;__main__&quot;:
+    import time
+
+    start_time = time.time()
+    asyncio.run(parse_and_save())
+    print(&quot;Execution time:&quot;, time.time() - start_time)
+</code></pre>
+<h2 id="html_1">Асинхронные функции для парсинга html и сохранения данных в базу данных</h2>
+<p>Для asyncio</p>
+<pre><code class="language-python">import json
+
+import aiohttp
+from bs4 import BeautifulSoup
+import psycopg2
+import asyncio
+import aiopg
+
+asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+
+async def get_connection():
+    # Настройки подключения к базе данных
+    return await aiopg.connect(
+        dsn=&quot;dbname=warriors_db user=postgres password=TecHeres3141 host=localhost port=5432&quot;
+    )
+
+
+async def parse_and_save_users(session, url):
+    async with session.get(url) as response:
+        html_content = await response.text()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    async with await get_connection() as conn:
+        async with conn.cursor() as cursor:
+            for li in soup.select('ul &gt; li'):
+                username = li.select_one('.username').text
+                password = li.select_one('.password').text
+                profile_id = int(li.select_one('.profile-id').text)
+
+                await cursor.execute(
+                    &quot;INSERT INTO \&quot;user\&quot; (username, password, profile_id) VALUES (%s, %s, %s)&quot;,
+                    (username, password, profile_id)
+                )
+            await cursor.execute(&quot;COMMIT&quot;)
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+async def parse_and_save_projects(session, url):
+    async with session.get(url) as response:
+        html_content = await response.text()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    async with await get_connection() as conn:
+        async with conn.cursor() as cursor:
+            for li in soup.select('ul &gt; li'):
+                project_name = li.select_one('.name').text
+                project_description = li.select_one('.description').text
+                project_expected_result = li.select_one('.expected-result').text
+                project_team_id = int(li.select_one('.team-id').text)
+
+                await cursor.execute(
+                    &quot;INSERT INTO project (name, description, expected_result, team_id) VALUES (%s, %s, %s, %s)&quot;,
+                    (project_name, project_description, project_expected_result, project_team_id))
+            await cursor.execute(&quot;COMMIT&quot;)
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+async def parse_and_save_tasks(session, url):
+    async with session.get(url) as response:
+        html_content = await response.text()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    async with await get_connection() as conn:
+        async with conn.cursor() as cursor:
+            for li in soup.select('ul &gt; li'):
+                task_name = li.select_one('.name').text
+                task_description = li.select_one('.description').text
+                task_deadline = li.select_one('.deadline').text
+                project_id = int(li.select_one('.project-id').text)
+
+                await cursor.execute(
+                    &quot;INSERT INTO task (name, description, deadline, project_id) VALUES (%s, %s, %s, %s)&quot;,
+                    (task_name, task_description, task_deadline, project_id)
+                )
+
+            await cursor.execute(&quot;COMMIT&quot;)
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+async def parse_and_save_userprofiles(session, url):
+    async with session.get(url) as response:
+        html_content = await response.text()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    async with await get_connection() as conn:
+        async with conn.cursor() as cursor:
+            for li in soup.select('ul &gt; li'):
+                avatar = li.select_one('.avatar').text
+                birth_date = li.select_one('.birth_date').text
+                skills = [skill_li.text for skill_li in li.select('ol.skills &gt; li')]
+
+                await cursor.execute(
+                    &quot;INSERT INTO userprofile (avatar, birth_date, skills) VALUES (%s, %s, %s)&quot;,
+                    (avatar, birth_date, json.dumps(skills))
+                )
+
+            await cursor.execute(&quot;COMMIT&quot;)
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+async def parse_and_save_teams(session, url):
+    async with session.get(url) as response:
+        html_content = await response.text()
+
+    soup = BeautifulSoup(html_content, 'html.parser')
+
+    async with await get_connection() as conn:
+        async with conn.cursor() as cursor:
+            for li in soup.select('ul &gt; li'):
+                team_name = li.select_one('.name').text
+
+                await cursor.execute(
+                    &quot;INSERT INTO team (name) VALUES (%s)&quot;,
+                    (team_name,)
+                )
+
+            await cursor.execute(&quot;COMMIT&quot;)
+
+    print(f&quot;Data from {url} parsed and saved to database.&quot;)
+
+
+async def parse_all_urls(handler_func, base, count):
+    async with aiohttp.ClientSession() as session:
+        for i in range(1, count + 1):
+            url = f&quot;{base}{i}.html&quot;
+            try:
+                await handler_func(session, url)
+            except Exception as e:
+                print(f&quot;Error: {e}&quot;)
+                await asyncio.sleep(1)
+
+
+data_handlers = {
+    &quot;tasks&quot;: parse_and_save_tasks,
+    &quot;projects&quot;: parse_and_save_projects,
+    &quot;users&quot;: parse_and_save_users,
+    &quot;teams&quot;: parse_and_save_teams,
+    &quot;userprofiles&quot;: parse_and_save_userprofiles,
+}
+</code></pre>
+<h2 id="_2">Сравнение времени выполнения программ</h2>
+<h3 id="task-1">Task 1:</h3>
+<table>
+<thead>
+<tr>
+<th>task1_threading.py</th>
+<th>task1_multiprocessing.py</th>
+<th>task1_asyncio.py</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.016694</td>
+<td>0.092828</td>
+<td>0.014107</td>
+</tr>
+</tbody>
+</table>
+<p>Multiprocessing - самый медленный за счет того, что он создает отдельный процесс, а не поток, а создание и управление
+процессами занимает больше времени, чем управление потоками. Threading и Asyncio работают быстрее, но Asyncio работает
+быстрее, чем Threading, так как он использует один поток, а не несколько.</p>
+<h3 id="task-2">Task 2:</h3>
+<table>
+<thead>
+<tr>
+<th>task2_threading.py</th>
+<th>task2_multiprocessing.py</th>
+<th>task2_asyncio.py</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2.58223 +- 0.2</td>
+<td>2.74991 +- 0.2</td>
+<td>2.14043 +- 0.2</td>
+</tr>
+</tbody>
+</table>
+<p>В данном случае, Asyncio работает быстрее, чем Threading и Multiprocessing, так как при записи в БД происходит много
+операций ввода/вывода,
+при этом вычислительная нагрузка от них невелика. Основным отличием подхода c asyncio от threading и multiprocessing -
+все функции-обработчики пришлось переписывать, сделав их асинхронными</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
