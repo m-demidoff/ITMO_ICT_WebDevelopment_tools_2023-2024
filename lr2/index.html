@@ -641,45 +641,51 @@ data_handlers = {
 <h2 id="_2">Сравнение времени выполнения программ</h2>
 <h3 id="task-1">Task 1:</h3>
 <table>
-<thead>
-<tr>
-<th>task1_threading.py</th>
-<th>task1_multiprocessing.py</th>
-<th>task1_asyncio.py</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0.016694</td>
-<td>0.092828</td>
-<td>0.014107</td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th></th>
+      <th>task1_threading.py</th>
+      <th>task1_multiprocessing.py</th>
+      <th>task1_asyncio.py</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Time</th>
+      <td>0.016694</td>
+      <td>0.092828</td>
+      <td>0.014107</td>
+    </tr>
+  </tbody>
 </table>
+
 <p>Multiprocessing - самый медленный за счет того, что он создает отдельный процесс, а не поток, а создание и управление
 процессами занимает больше времени, чем управление потоками. Threading и Asyncio работают быстрее, но Asyncio работает
 быстрее, чем Threading, так как он использует один поток, а не несколько.</p>
 <h3 id="task-2">Task 2:</h3>
 <table>
-<thead>
-<tr>
-<th>task2_threading.py</th>
-<th>task2_multiprocessing.py</th>
-<th>task2_asyncio.py</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2.58223 +- 0.2</td>
-<td>2.74991 +- 0.2</td>
-<td>2.14043 +- 0.2</td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th></th>
+      <th>task2_threading.py</th>
+      <th>task2_multiprocessing.py</th>
+      <th>task2_asyncio.py</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Time</th>
+      <td>2.58223 +- 0.2</td>
+      <td>2.74991 +- 0.2</td>
+      <td>2.14043 +- 0.2</td>
+    </tr>
+  </tbody>
 </table>
+
 <p>В данном случае, Asyncio работает быстрее, чем Threading и Multiprocessing, так как при записи в БД происходит много
 операций ввода/вывода,
 при этом вычислительная нагрузка от них невелика. Основным отличием подхода c asyncio от threading и multiprocessing -
-все функции-обработчики пришлось переписывать, сделав их асинхронными</p></div>
+все функции-обработчики пришлось переписывать, сделав их асинхронными.</p></div>
             </div>
         </div>
 

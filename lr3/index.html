@@ -88,11 +88,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#parserpy" class="nav-link">parser.py</a>
+            <li class="nav-item" data-bs-level="2"><a href="#http-async_labparser_apppy" class="nav-link">http-парсер (async_lab/parser_app.py)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#workerpy" class="nav-link">worker.py</a>
+            <li class="nav-item" data-bs-level="2"><a href="#dockerfile" class="nav-link">Dockerfile</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -100,7 +100,19 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">Запуск</a>
+            <li class="nav-item" data-bs-level="2"><a href="#-fastapi" class="nav-link">Эндпоинт-парсер для FastAPI</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#celery-fast_api_labworkerpy" class="nav-link">Настройка Celery (fast_api_lab/worker.py)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_3" class="nav-link">Эндпоинт для асинхронного вызова</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#_4" class="nav-link">Запуск</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -122,96 +134,34 @@
 <li><code>celery</code></li>
 <li><code>redis</code></li>
 </ul>
-<h2 id="parserpy"><strong>parser.py</strong></h2>
-<pre><code>from fastapi import APIRouter, HTTPException, BackgroundTasks
+<h2 id="http-async_labparser_apppy"><strong>http-парсер (async_lab/parser_app.py)</strong></h2>
+<pre><code>from fastapi import FastAPI, HTTPException
 import requests
-import asyncio
-from worker import celery_app
-
-parser_router = APIRouter()
+from async_lab.task2_asyncio import parse_all_urls, data_handlers
 
 
-@parser_router.post(&quot;/parse/{category}&quot;)
-async def parse(category: str):
+app = FastAPI()
+
+
+@app.post(&quot;/parse/:category&quot;)
+async def parse(url: str):
     try:
-        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
-        return response.json()
+        category = url.split(&quot;/&quot;)[-1]
+        response = requests.get(url)
+        response.raise_for_status()
+        total_added = await parse_all_urls(data_handlers.get(category), url, 5)
+
+        return {&quot;message&quot;: &quot;Parsing completed&quot;, &quot;total_added&quot;: total_added}
     except requests.RequestException as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
-@parser_router.post(&quot;/celery-parse/{category}&quot;)
-async def parse(category: str, background_tasks: BackgroundTasks):
-    print(&quot;parsing&quot;)
-    try:
-        # Постановка задачи в очередь Celery
-
-        task = celery_app.send_task('parse_urls_task', args=[category])
-
-        # Добавление фоновой задачи для проверки статуса задачи
-        background_tasks.add_task(check_task_status, task.id)
-
-        return {&quot;task_id&quot;: task.id, &quot;status&quot;: &quot;Task has been started&quot;}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-async def check_task_status(task_id: str):
-    result = celery_app.AsyncResult(task_id)
-    while not result.ready():
-        await asyncio.sleep(1)
-    return result.result
 </code></pre>
-<h2 id="workerpy"><strong>worker.py</strong></h2>
-<pre><code>from celery import Celery
-from sqlmodel import Session, create_engine, text
-import os
-import requests
-from fastapi import HTTPException
-
-engine = create_engine(os.getenv(&quot;DATABASE_URL&quot;), echo=True)
-
-
-print(os.getenv(&quot;CELERY_BROKER_URL&quot;), os.getenv(&quot;CELERY_RESULT_BACKEND&quot;))
-celery_app = Celery('fast_api_lab', broker=os.getenv(&quot;CELERY_BROKER_URL&quot;, 'redis://localhost:6379/0'),
-                    backend=os.getenv(&quot;CELERY_RESULT_BACKEND&quot;, 'redis://localhost:6379/0'))
-
-celery_app.conf.update(
-    task_serializer='json',
-    result_serializer='json',
-    accept_content=['json'],
-    timezone='UTC',
-    enable_utc=True,
-    beat_schedule={
-        'count-records-every-hour': {
-            'task': 'count_records_task',
-            'schedule': 3.0,  # каждый час
-        },
-    },
-)
-
-
-@celery_app.task(name=&quot;parse_urls_task&quot;)
-def parse_urls_task(category: str):
-    try:
-        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
-        return response.json()
-    except requests.RequestException as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
-@celery_app.task(name=&quot;count_records_task&quot;)
-def count_records_task():
-    table_names = [&quot;project&quot;, &quot;task&quot;, &quot;team&quot;, &quot;user&quot;, &quot;userprofile&quot;]
-    counts = {}
-
-    with Session(engine) as session:
-        for table_name in table_names:
-            statement = text(f&quot;SELECT COUNT(*) FROM {table_name}&quot;)
-            result = session.execute(statement).one()
-            counts[table_name] = result[0]
-
-    return counts
+<h2 id="dockerfile"><strong>Dockerfile</strong></h2>
+<pre><code>FROM python:3.10-alpine
+WORKDIR /fast_api_lab
+RUN apk add --no-cache gcc musl-dev linux-headers
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY . .
 </code></pre>
 <h2 id="docker-composeyml"><strong>docker-compose.yml</strong></h2>
 <pre><code>version: &quot;3.8&quot;
@@ -305,8 +255,84 @@ volumes:
     postgres_data:
     redis_data:
 </code></pre>
-<h2 id="_3">Запуск</h2>
-<p>Запуск проекта осуществляется командой <code>docker-compose up -d --build</code>, через docker desktop -  запущенные контейнеры.</p></div>
+<h2 id="-fastapi"><strong>Эндпоинт-парсер для FastAPI</strong></h2>
+<pre><code>@parser_router.post(&quot;/parse/{category}&quot;)
+async def parse(category: str):
+    try:
+        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
+        return response.json()
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+</code></pre>
+<h2 id="celery-fast_api_labworkerpy"><strong>Настройка Celery (fast_api_lab/worker.py)</strong></h2>
+<pre><code>from celery import Celery
+from sqlmodel import Session, create_engine, text
+import os
+import requests
+from fastapi import HTTPException
+
+engine = create_engine(os.getenv(&quot;DATABASE_URL&quot;), echo=True)
+
+
+print(os.getenv(&quot;CELERY_BROKER_URL&quot;), os.getenv(&quot;CELERY_RESULT_BACKEND&quot;))
+celery_app = Celery('fast_api_lab', broker=os.getenv(&quot;CELERY_BROKER_URL&quot;, 'redis://localhost:6379/0'),
+                    backend=os.getenv(&quot;CELERY_RESULT_BACKEND&quot;, 'redis://localhost:6379/0'))
+
+celery_app.conf.update(
+    task_serializer='json',
+    result_serializer='json',
+    accept_content=['json'],
+    timezone='UTC',
+    enable_utc=True,
+    beat_schedule={
+        'count-records-every-hour': {
+            'task': 'count_records_task',
+            'schedule': 3.0,  
+        },
+    },
+)
+
+
+@celery_app.task(name=&quot;parse_urls_task&quot;)
+def parse_urls_task(category: str):
+    try:
+        response = requests.post(f&quot;http://async_lab:8080/parse/{category}&quot;)
+        return response.json()
+    except requests.RequestException as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@celery_app.task(name=&quot;count_records_task&quot;)
+def count_records_task():
+    table_names = [&quot;project&quot;, &quot;task&quot;, &quot;team&quot;, &quot;user&quot;, &quot;userprofile&quot;]
+    counts = {}
+
+    with Session(engine) as session:
+        for table_name in table_names:
+            statement = text(f&quot;SELECT COUNT(*) FROM {table_name}&quot;)
+            result = session.execute(statement).one()
+            counts[table_name] = result[0]
+
+    return counts
+</code></pre>
+<h2 id="_3"><strong>Эндпоинт для асинхронного вызова</strong></h2>
+<pre><code>@parser_router.post(&quot;/celery-parse/{category}&quot;)
+async def parse(category: str, background_tasks: BackgroundTasks):
+    print(&quot;parsing&quot;)
+    try:
+        # Постановка задачи в очередь Celery
+
+        task = celery_app.send_task('parse_urls_task', args=[category])
+
+        # Добавление фоновой задачи для проверки статуса задачи
+        background_tasks.add_task(check_task_status, task.id)
+
+        return {&quot;task_id&quot;: task.id, &quot;status&quot;: &quot;Task has been started&quot;}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+</code></pre>
+<h2 id="_4">Запуск</h2>
+<p>Запуск проекта осуществляется командой <code>docker-compose up -d --build</code>, через docker desktop смотрим запущенные контейнеры.</p></div>
             </div>
         </div>
 
